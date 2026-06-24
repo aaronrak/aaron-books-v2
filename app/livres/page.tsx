@@ -3,17 +3,18 @@ import { BookCard } from "@/components/book-card";
 import { BookFilter } from "@/components/book-filter";
 import { Search } from "lucide-react";
 
-interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 export default async function BooksPage({ searchParams }: PageProps) {
+  const params = await searchParams;
   const { data: categories } = await supabase
     .from("categories")
     .select("*")
     .order("name");
 
-  const categorySlug = searchParams?.categorie as string | undefined;
+  const categorySlug = params?.categorie as string | undefined;
   const selectedCategory = categorySlug
     ? categories?.find((c) => c.slug === categorySlug)
     : null;

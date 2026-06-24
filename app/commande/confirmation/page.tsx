@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle, Package, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function OrderConfirmationPage() {
+function OrderConfirmationContent() {
   const searchParams = useSearchParams();
   const orderNumber = searchParams.get("numero") || "N/A";
 
@@ -56,5 +57,20 @@ export default function OrderConfirmationPage() {
         </Link>
       </div>
     </div>
+  );
+}
+
+export default function OrderConfirmationPage() {
+  return (
+    <Suspense fallback={
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center">
+        <div className="mb-6">
+          <CheckCircle className="h-20 w-20 text-emerald-200 mx-auto animate-pulse" />
+        </div>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Chargement...</h1>
+      </div>
+    }>
+      <OrderConfirmationContent />
+    </Suspense>
   );
 }

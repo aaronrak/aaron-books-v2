@@ -2,12 +2,13 @@ import { supabase } from "@/lib/supabase";
 import { BookCard } from "@/components/book-card";
 import { Search } from "lucide-react";
 
-interface PageProps {
-  searchParams: { [key: string]: string | string[] | undefined };
-}
+type PageProps = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
 
 export default async function SearchPage({ searchParams }: PageProps) {
-  const query = (searchParams?.q as string) || "";
+  const params = await searchParams;
+  const query = (params?.q as string) || "";
 
   let bookQuery = supabase
     .from("books")

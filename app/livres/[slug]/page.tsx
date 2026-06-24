@@ -8,9 +8,9 @@ import { AddToCart } from "@/components/add-to-cart";
 import { BookCard } from "@/components/book-card";
 import { ArrowLeft, BookOpen, Calendar, FileText, Globe, Tag, User } from "lucide-react";
 
-interface PageProps {
-  params: { slug: string };
-}
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
 
 async function getBook(slug: string) {
   const bookId = slug.split("-").pop();
@@ -52,7 +52,8 @@ async function getRelatedBooks(bookId: string, authorId: string | null) {
 }
 
 export default async function BookDetailPage({ params }: PageProps) {
-  const book = await getBook(params.slug);
+  const { slug } = await params;
+  const book = await getBook(slug);
   if (!book) return notFound();
 
   const reviews = await getReviews(book.id);

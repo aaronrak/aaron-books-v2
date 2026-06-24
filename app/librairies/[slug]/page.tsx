@@ -5,9 +5,9 @@ import { Bookstore } from "@/lib/supabase";
 import { BookCard } from "@/components/book-card";
 import { MapPin, Globe, Mail, Phone, ArrowLeft } from "lucide-react";
 
-interface PageProps {
-  params: { slug: string };
-}
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
 
 async function getBookstore(slug: string) {
   const { data } = await supabase
@@ -29,7 +29,8 @@ async function getBookstoreBooks(bookstoreId: string) {
 }
 
 export default async function BookstoreDetailPage({ params }: PageProps) {
-  const bookstore = await getBookstore(params.slug);
+  const { slug } = await params;
+  const bookstore = await getBookstore(slug);
   if (!bookstore) return notFound();
 
   const books = await getBookstoreBooks(bookstore.id);
