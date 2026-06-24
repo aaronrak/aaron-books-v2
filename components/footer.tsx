@@ -61,9 +61,14 @@ export function Footer() {
           <p className="text-sm text-slate-500">
             Aaron Books. Soutenez les librairies independantes.
           </p>
-          <p className="text-sm text-slate-500 flex items-center gap-1">
-            Fait avec <Heart className="h-3 w-3 text-red-500 fill-red-500" /> pour les librairies
-          </p>
+          <div className="flex items-center gap-4">
+            <a href="/project-files.zip" download className="text-sm text-emerald-700 hover:text-emerald-800 font-medium">
+              Télécharger les fichiers sources
+            </a>
+            <p className="text-sm text-slate-500 flex items-center gap-1">
+              Fait avec <Heart className="h-3 w-3 text-red-500 fill-red-500" /> pour les librairies
+            </p>
+          </div>
         </div>
       </div>
     </footer>
