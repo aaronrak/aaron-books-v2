@@ -26,6 +26,7 @@ export function Header() {
     { href: "/", label: "Accueil" },
     { href: "/livres", label: "Livres" },
     { href: "/librairies", label: "Librairies" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (

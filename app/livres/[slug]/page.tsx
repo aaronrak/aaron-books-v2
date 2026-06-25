@@ -102,7 +102,7 @@ export default async function BookDetailPage({ params }: PageProps) {
             <h1 className="text-3xl font-bold text-slate-900 mb-2">{book.title}</h1>
             {book.subtitle && <p className="text-lg text-slate-600 mb-2">{book.subtitle}</p>}
             <div className="flex items-center gap-2">
-              <Link href={`/livres?auteur=${book.author?.id}`} className="text-emerald-800 hover:underline font-medium">
+              <Link href={`/auteurs/${book.author?.id}`} className="text-emerald-800 hover:underline font-medium">
                 {book.author?.name}
               </Link>
               {book.publisher && (

@@ -61,7 +61,9 @@ export function BookCard({ book, showAddToCart = true }: BookCardProps) {
           <h3 className="font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-800 transition-colors">
             {book.title}
           </h3>
-          <p className="text-sm text-slate-600">{book.author?.name}</p>
+          <Link href={`/auteurs/${book.author?.id}`} className="text-sm text-slate-600 hover:text-emerald-800 transition-colors">
+            {book.author?.name}
+          </Link>
         </Link>
 
         <div className="flex items-center gap-1.5">
