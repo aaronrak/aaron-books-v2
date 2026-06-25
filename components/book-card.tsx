@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Book } from "@/lib/supabase";
 import { StarRating } from "@/components/star-rating";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/components/cart-provider";
 import { toast } from "sonner";
@@ -15,23 +15,39 @@ interface BookCardProps {
 }
 
 export function BookCard({ book, showAddToCart = true }: BookCardProps) {
+  const router = useRouter();
   const { addItem } = useCart();
   const slug = book.title.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+  const detailUrl = `/livres/${slug}-${book.id}`;
+
   const discount = book.original_price && book.original_price > book.price
     ? Math.round((1 - book.price / book.original_price) * 100)
     : null;
 
+  const handleCardClick = () => {
+    router.push(detailUrl);
+  };
+
+  const handleAuthorClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (book.author?.id) {
+      router.push(`/auteurs/${book.author.id}`);
+    }
+  };
+
   const handleAddToCart = async (e: React.MouseEvent) => {
-    e.preventDefault();
     e.stopPropagation();
     await addItem(book.id);
     toast.success("Ajoute au panier !");
   };
 
   return (
-    <div className="group relative bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300">
+    <div
+      onClick={handleCardClick}
+      className="group relative bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg transition-all duration-300 cursor-pointer"
+    >
       {/* Cover image */}
-      <Link href={`/livres/${slug}-${book.id}`} className="block relative aspect-[2/3] overflow-hidden bg-slate-100">
+      <div className="block relative aspect-[2/3] overflow-hidden bg-slate-100">
         {book.cover_image ? (
           <Image
             src={book.cover_image}
@@ -41,8 +57,9 @@ export function BookCard({ book, showAddToCart = true }: BookCardProps) {
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 20vw"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-slate-400">
-            <span className="text-sm">Pas de couverture</span>
+          <div className="w-full h-full flex flex-col items-center justify-center text-slate-400 bg-slate-100">
+            <BookOpen className="h-12 w-12 mb-2" />
+            <span className="text-xs text-slate-500">Pas de couverture</span>
           </div>
         )}
         {discount && (
@@ -53,18 +70,19 @@ export function BookCard({ book, showAddToCart = true }: BookCardProps) {
         <span className="absolute bottom-2 right-2 bg-white/90 text-slate-700 text-xs font-medium px-2 py-1 rounded capitalize">
           {book.format}
         </span>
-      </Link>
+      </div>
 
       {/* Info */}
       <div className="p-4 space-y-2">
-        <Link href={`/livres/${slug}-${book.id}`} className="block">
-          <h3 className="font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-800 transition-colors">
-            {book.title}
-          </h3>
-          <Link href={`/auteurs/${book.author?.id}`} className="text-sm text-slate-600 hover:text-emerald-800 transition-colors">
-            {book.author?.name}
-          </Link>
-        </Link>
+        <h3 className="font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-800 transition-colors">
+          {book.title}
+        </h3>
+        <span
+          onClick={handleAuthorClick}
+          className="block text-sm text-slate-600 hover:text-emerald-800 transition-colors cursor-pointer"
+        >
+          {book.author?.name}
+        </span>
 
         <div className="flex items-center gap-1.5">
           <StarRating rating={book.rating || 0} size="sm" />
